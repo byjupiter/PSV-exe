@@ -1,0 +1,7 @@
+# -*- mode: python ; coding: utf-8 -*-
+
+ip = 192.168.120.85
+password = VPsystem1234!!
+
+#ip = 192.168.120.97
+#password = 123
