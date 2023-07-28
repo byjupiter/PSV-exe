@@ -349,58 +349,58 @@ try:
             
             if message == QMessageBox.Yes:
 
-                # global dic
-
-                # path = '\\\\192.168.120.60\\Archiv\\Ncp'
-
-                # dic = {}
-
-                # for i,(root, directories, files) in enumerate(os.walk(path)):
-                #     for file in files:
-                #         if 'png' in file:
-                #             valued = str(root+'\\'+file)
-                #         elif 'lst' in file:
-                #             keyed = file.replace('.lst','')
-                #             dic[keyed] = valued
-                #         else:
-                #             pass
-
-                # txtpath = "\\\\192.168.120.85\\vps공유\\00. VP승인 프로그램모음\\13.개발프로그램\\로그\\jobindexes"
-                # with open(txtpath, "w",encoding='UTF8') as i:
-                #     for key,value in dic.items():
-                #         i.write(f'{key} : {value}\n')
-
-                # MyWindow.diction()
-
-                start = time.time()
-
                 global dic
 
                 path = '\\\\192.168.120.60\\Archiv\\Ncp'
-                jobpath = '\\\\192.168.120.85\\vpdata\\PROJECT\\000통합프로그램000'
 
                 dic = {}
 
-                files = os.listdir(jobpath)
+                for i,(root, directories, files) in enumerate(os.walk(path)):
+                    for file in files:
+                        if 'png' in file:
+                            valued = str(root+'\\'+file)
+                        elif 'lst' in file:
+                            keyed = file.replace('.lst','')
+                            dic[keyed] = valued
+                        else:
+                            pass
 
-                for file in files:
-                    if os.path.isdir(file):
-                        if '.tmt' in file:
-                            print(os.path.join(jobpath,file))
-                    else:
-                        if '예전' not in file:
-                            jobpath1 = os.path.join(jobpath,file)
-                            files1 = os.listdir(jobpath1)
-                            for file1 in files1:
-                                if os.path.isdir(file1):
-                                    if '.tmt' in file1:
-                                        print(os.path.join(jobpath1,file1))
-                                else:
-                                    jobpath2 = os.path.join(jobpath1,file1)
-                                    files2 = os.listdir(jobpath2)
-                                    for file2 in files2:
-                                        print(os.path.join(jobpath2,file2))
-                                        # if '.tmt' in file2:
+                txtpath = "\\\\192.168.120.85\\vps공유\\00. VP승인 프로그램모음\\13.개발프로그램\\로그\\jobindexes"
+                with open(txtpath, "w",encoding='UTF8') as i:
+                    for key,value in dic.items():
+                        i.write(f'{key} : {value}\n')
+
+                MyWindow.diction()
+
+                # start = time.time()
+
+                # global dic
+
+                # path = '\\\\192.168.120.60\\Archiv\\Ncp'
+                # jobpath = '\\\\192.168.120.85\\vpdata\\PROJECT\\000통합프로그램000'
+
+                # dic = {}
+
+                # files = os.listdir(jobpath)
+
+                # for file in files:
+                #     if os.path.isdir(file):
+                #         if '.tmt' in file:
+                #             print(os.path.join(jobpath,file))
+                #     else:
+                #         if '예전' not in file:
+                #             jobpath1 = os.path.join(jobpath,file)
+                #             files1 = os.listdir(jobpath1)
+                #             for file1 in files1:
+                #                 if os.path.isdir(file1):
+                #                     if '.tmt' in file1:
+                #                         print(os.path.join(jobpath1,file1))
+                #                 else:
+                #                     jobpath2 = os.path.join(jobpath1,file1)
+                #                     files2 = os.listdir(jobpath2)
+                #                     for file2 in files2:
+                #                         print(os.path.join(jobpath2,file2))
+                #                         # if '.tmt' in file2:
                                             
                                         
                         
@@ -481,7 +481,7 @@ try:
 
 
                 # print(len(keylist),len(valuelist))
-                print("time :", time.time() - start)
+                # print("time :", time.time() - start)
 
                 QMessageBox.information(QWidget(),'색인 완료','색인이 완료되었습니다.')
 

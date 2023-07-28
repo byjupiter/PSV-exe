@@ -5,6 +5,20 @@ class setting():
     global lines
 
     lines = open('\\\\192.168.120.85\\vps공유\\00. VP승인 프로그램모음\\13.개발프로그램\\로그\\psvsetting','r').readlines()
+    
+    def update():
+        
+        for line in lines:
+            
+            if line[0] == '#':
+                pass
+            else:
+                line = line.replace('\n','').split(' ')
+                if line[0] == 'update':
+
+                    update = line[2]
+
+                    return update
 
     def tomonth():
         

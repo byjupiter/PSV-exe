@@ -723,6 +723,7 @@ try:
                         table1.setItem(rows.index(x), 17, QTableWidgetItem(end[15]))
                         table1.setItem(rows.index(x), 18, QTableWidgetItem(end[16]))
 
+                        print(str(end[17]))
                         if ' day, ' in str(end[17]):
 
                             days = int(str(end[17]).split(' day, ')[0])
@@ -732,13 +733,21 @@ try:
 
                             ttime = '%s:%s:%s'%(str((days*24)+hour),minit,secc)
                             table1.setItem(rows.index(x), 19, QTableWidgetItem(str(ttime)))
+                            
+                        elif ' days, ' in str(end[17]):
+                            
+                            days = int(str(end[17]).split(' days, ')[0])
+                            hour = int(str(end[17]).split(' days, ')[1].split(':')[0])
+                            minit = str(end[17]).split(' days, ')[1].split(':')[1]
+                            secc = str(end[17]).split(' days, ')[1].split(':')[2]
 
-                        elif ' day, ' not in str(end[17]):
+                            ttime = '%s:%s:%s'%(str((days*24)+hour),minit,secc)
+                            table1.setItem(rows.index(x), 19, QTableWidgetItem(str(ttime)))
+
+                        elif ' day, ' not in str(end[17]) and ' days, ' not in str(end[17]):
                             
                             table1.setItem(rows.index(x), 19, QTableWidgetItem(str(end[17])))
-
                         
-
                         bunmo = int(str(end[12]).split('/')[1])+int(str(end[13]).split('/')[1])+int(str(end[14]).split('/')[1])+int(str(end[15]).split('/')[1])+int(str(end[16]).split('/')[1])
                         bunja = int(str(end[12]).split('/')[0])+int(str(end[13]).split('/')[0])+int(str(end[14]).split('/')[0])+int(str(end[15]).split('/')[0])+int(str(end[16]).split('/')[0])
 

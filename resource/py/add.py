@@ -672,7 +672,7 @@ try:
 
                             sql = "UPDATE planner SET 전개완료일=%s,판금완료일=%s,비고=%s,작업현황=%s WHERE 관리번호=%s"   # 데이터베이스 명령어를 spl 변수에 저장
                             with conn.cursor() as cur:
-                                cur.execute(sql,(ufd,ped,oth,x,'작업대기'))
+                                cur.execute(sql,(ufd,ped,oth,'작업대기',x))
                                 conn.commit()
                         
                         sql = "UPDATE sidedater SET PDF경로=%s,전개완료일=%s,판금완료일=%s,비고=%s,테이블열헤더=%s,테이블내용=%s,취소=%s WHERE 관리번호=%s"   # 데이터베이스 명령어를 spl 변수에 저장
