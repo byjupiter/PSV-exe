@@ -1,0 +1,844 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1113</width>
+    <height>381</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1113</width>
+    <height>381</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1113</width>
+    <height>381</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>VPS LABEL</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(98, 102, 119);</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QFrame" name="gridFrame">
+    <property name="geometry">
+     <rect>
+      <x>-6</x>
+      <y>-6</y>
+      <width>1121</width>
+      <height>381</height>
+     </rect>
+    </property>
+    <widget class="QLabel" name="date2_label">
+     <property name="geometry">
+      <rect>
+       <x>785</x>
+       <y>40</y>
+       <width>100</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 0, 0);
+border: 2px solid rgb(127, 127, 127);
+font: 10pt &quot;맑은 고딕&quot;;
+</string>
+     </property>
+     <property name="text">
+      <string>생산완료일</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="path_create">
+     <property name="geometry">
+      <rect>
+       <x>673</x>
+       <y>10</y>
+       <width>50</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(32, 56, 100);
+font: 75 10pt &quot;맑은 고딕&quot;;
+</string>
+     </property>
+     <property name="text">
+      <string>생성</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="campany">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>40</y>
+       <width>620</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);
+border: 2px solid rgb(127, 127, 127);
+font: 10pt &quot;맑은 고딕&quot;;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="work_label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>150</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 0, 0);
+border: 2px solid rgb(127, 127, 127);
+font: 10pt &quot;맑은 고딕&quot;;
+</string>
+     </property>
+     <property name="text">
+      <string>작업구분</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="file_label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>130</y>
+       <width>150</width>
+       <height>200</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 0, 0);
+border: 2px solid rgb(127, 127, 127);
+font: 10pt &quot;맑은 고딕&quot;;
+</string>
+     </property>
+     <property name="text">
+      <string>파일</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="create">
+     <property name="geometry">
+      <rect>
+       <x>11</x>
+       <y>330</y>
+       <width>999</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(32, 56, 100);
+font: 75 10pt &quot;맑은 고딕&quot;;
+</string>
+     </property>
+     <property name="text">
+      <string>라벨 생성</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="ea">
+     <property name="geometry">
+      <rect>
+       <x>885</x>
+       <y>100</y>
+       <width>230</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);
+border: 2px solid rgb(127, 127, 127);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="name_label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>150</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 0, 0);
+border: 2px solid rgb(127, 127, 127);
+font: 10pt &quot;맑은 고딕&quot;;
+</string>
+     </property>
+     <property name="text">
+      <string>작업명</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="work">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>100</y>
+       <width>620</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);
+border: 2px solid rgb(127, 127, 127);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="name">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>70</y>
+       <width>620</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);
+border: 2px solid rgb(127, 127, 127);
+font: 10pt &quot;맑은 고딕&quot;;</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="file_search">
+     <property name="geometry">
+      <rect>
+       <x>1012</x>
+       <y>130</y>
+       <width>102</width>
+       <height>135</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(32, 56, 100);
+font: 75 10pt &quot;맑은 고딕&quot;;
+</string>
+     </property>
+     <property name="text">
+      <string>파일 찾기</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="path_label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>150</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 0, 0);
+border: 2px solid rgb(127, 127, 127);
+font: 10pt &quot;맑은 고딕&quot;;
+</string>
+     </property>
+     <property name="text">
+      <string>라벨저장경로</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="prog">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>367</y>
+       <width>1011</width>
+       <height>10</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+font: 1pt &quot;맑은 고딕&quot;;
+</string>
+     </property>
+     <property name="value">
+      <number>0</number>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="date2">
+     <property name="geometry">
+      <rect>
+       <x>885</x>
+       <y>40</y>
+       <width>200</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);
+border: 2px solid rgb(127, 127, 127);
+font: 10pt &quot;맑은 고딕&quot;;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QListWidget" name="filelist">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>130</y>
+       <width>852</width>
+       <height>200</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);
+border: 2px solid rgb(127, 127, 127);
+font: 10pt &quot;맑은 고딕&quot;;</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="date1_label">
+     <property name="geometry">
+      <rect>
+       <x>785</x>
+       <y>10</y>
+       <width>100</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 0, 0);
+border: 2px solid rgb(127, 127, 127);
+font: 10pt &quot;맑은 고딕&quot;;
+</string>
+     </property>
+     <property name="text">
+      <string>판금완료일</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="ea_label">
+     <property name="geometry">
+      <rect>
+       <x>785</x>
+       <y>100</y>
+       <width>100</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 0, 0);
+border: 2px solid rgb(127, 127, 127);
+font: 10pt &quot;맑은 고딕&quot;;
+</string>
+     </property>
+     <property name="text">
+      <string>수량옵션</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="path_save">
+     <property name="geometry">
+      <rect>
+       <x>728</x>
+       <y>10</y>
+       <width>50</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(32, 56, 100);
+font: 75 10pt &quot;맑은 고딕&quot;;
+</string>
+     </property>
+     <property name="text">
+      <string>저장</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="company_label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>150</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 0, 0);
+border: 2px solid rgb(127, 127, 127);
+font: 10pt &quot;맑은 고딕&quot;;
+</string>
+     </property>
+     <property name="text">
+      <string>고객사</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="printbtn">
+     <property name="geometry">
+      <rect>
+       <x>1012</x>
+       <y>330</y>
+       <width>102</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(32, 56, 100);
+font: 75 10pt &quot;맑은 고딕&quot;;
+</string>
+     </property>
+     <property name="text">
+      <string>출력</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="date1">
+     <property name="geometry">
+      <rect>
+       <x>885</x>
+       <y>10</y>
+       <width>200</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);
+border: 2px solid rgb(127, 127, 127);
+font: 10pt &quot;맑은 고딕&quot;;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="path">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>10</y>
+       <width>510</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);
+border: 2px solid rgb(127, 127, 127);
+font: 10pt &quot;맑은 고딕&quot;;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="allreset">
+     <property name="geometry">
+      <rect>
+       <x>1012</x>
+       <y>298</y>
+       <width>102</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(32, 56, 100);
+font: 75 10pt &quot;맑은 고딕&quot;;
+</string>
+     </property>
+     <property name="text">
+      <string>전체리셋</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="reset">
+     <property name="geometry">
+      <rect>
+       <x>1012</x>
+       <y>266</y>
+       <width>102</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(32, 56, 100);
+font: 75 10pt &quot;맑은 고딕&quot;;
+</string>
+     </property>
+     <property name="text">
+      <string>파일리셋</string>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="ea1">
+     <property name="geometry">
+      <rect>
+       <x>930</x>
+       <y>105</y>
+       <width>50</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);
+font: 10pt &quot;맑은 고딕&quot;;</string>
+     </property>
+     <property name="text">
+      <string>ON</string>
+     </property>
+     <attribute name="buttonGroup">
+      <string notr="true">ea_group</string>
+     </attribute>
+    </widget>
+    <widget class="QRadioButton" name="ea2">
+     <property name="geometry">
+      <rect>
+       <x>1020</x>
+       <y>105</y>
+       <width>50</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);
+font: 10pt &quot;맑은 고딕&quot;;</string>
+     </property>
+     <property name="text">
+      <string>OFF</string>
+     </property>
+     <attribute name="buttonGroup">
+      <string notr="true">ea_group</string>
+     </attribute>
+    </widget>
+    <widget class="QLabel" name="date3_label">
+     <property name="geometry">
+      <rect>
+       <x>785</x>
+       <y>70</y>
+       <width>100</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(0, 0, 0);
+border: 2px solid rgb(127, 127, 127);
+font: 10pt &quot;맑은 고딕&quot;;
+</string>
+     </property>
+     <property name="text">
+      <string>고객사납품일</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="date3">
+     <property name="geometry">
+      <rect>
+       <x>885</x>
+       <y>70</y>
+       <width>200</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);
+border: 2px solid rgb(127, 127, 127);
+font: 10pt &quot;맑은 고딕&quot;;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="date3_ex">
+     <property name="geometry">
+      <rect>
+       <x>1086</x>
+       <y>70</y>
+       <width>30</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);</string>
+     </property>
+     <property name="text">
+      <string>▼</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QRadioButton" name="work1">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>99</y>
+      <width>70</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);
+font: 10pt &quot;맑은 고딕&quot;;</string>
+    </property>
+    <property name="text">
+     <string>공란</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">work_group</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="work2">
+    <property name="geometry">
+     <rect>
+      <x>255</x>
+      <y>99</y>
+      <width>70</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);
+font: 10pt &quot;맑은 고딕&quot;;</string>
+    </property>
+    <property name="text">
+     <string>양산</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">work_group</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="work3">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>99</y>
+      <width>70</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);
+font: 10pt &quot;맑은 고딕&quot;;</string>
+    </property>
+    <property name="text">
+     <string>단품</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">work_group</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="work4">
+    <property name="geometry">
+     <rect>
+      <x>405</x>
+      <y>99</y>
+      <width>70</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);
+font: 10pt &quot;맑은 고딕&quot;;</string>
+    </property>
+    <property name="text">
+     <string>FR</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">work_group</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="work5">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>99</y>
+      <width>70</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);
+font: 10pt &quot;맑은 고딕&quot;;</string>
+    </property>
+    <property name="text">
+     <string>긴급</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">work_group</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="work6">
+    <property name="geometry">
+     <rect>
+      <x>545</x>
+      <y>99</y>
+      <width>70</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);
+font: 10pt &quot;맑은 고딕&quot;;</string>
+    </property>
+    <property name="text">
+     <string>불량</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">work_group</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="work7">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>99</y>
+      <width>70</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);
+font: 10pt &quot;맑은 고딕&quot;;</string>
+    </property>
+    <property name="text">
+     <string>기타</string>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">work_group</string>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="date1_ex">
+    <property name="geometry">
+     <rect>
+      <x>1080</x>
+      <y>4</y>
+      <width>30</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);</string>
+    </property>
+    <property name="text">
+     <string>▼</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="date2_ex">
+    <property name="geometry">
+     <rect>
+      <x>1080</x>
+      <y>34</y>
+      <width>30</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);
+background-color: rgb(66, 69, 84);</string>
+    </property>
+    <property name="text">
+     <string>▼</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>campany</tabstop>
+  <tabstop>name</tabstop>
+  <tabstop>date1</tabstop>
+  <tabstop>date2</tabstop>
+  <tabstop>date3</tabstop>
+  <tabstop>work1</tabstop>
+  <tabstop>work2</tabstop>
+  <tabstop>work3</tabstop>
+  <tabstop>work4</tabstop>
+  <tabstop>work5</tabstop>
+  <tabstop>work6</tabstop>
+  <tabstop>work7</tabstop>
+  <tabstop>ea1</tabstop>
+  <tabstop>ea2</tabstop>
+  <tabstop>path_create</tabstop>
+  <tabstop>path_save</tabstop>
+  <tabstop>date1_ex</tabstop>
+  <tabstop>date2_ex</tabstop>
+  <tabstop>date3_ex</tabstop>
+  <tabstop>file_search</tabstop>
+  <tabstop>reset</tabstop>
+  <tabstop>allreset</tabstop>
+  <tabstop>printbtn</tabstop>
+  <tabstop>filelist</tabstop>
+  <tabstop>create</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+ <buttongroups>
+  <buttongroup name="work_group"/>
+  <buttongroup name="ea_group"/>
+ </buttongroups>
+</ui>
