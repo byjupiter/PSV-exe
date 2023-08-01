@@ -563,7 +563,7 @@ border-radius: 5px;
 border-color: #D7D7D7;</string>
         </property>
         <property name="text">
-         <string>안정적인 서비스 사용을 위해 최신 버전으로 업데이트 해주세요.</string>
+         <string>안정적인 서비스 사용을 위해 최신 버전으로 업데이트해 주세요.</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
