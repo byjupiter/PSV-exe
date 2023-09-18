@@ -20,8 +20,8 @@ try:
 
     import faultyadd,setting
 
-    ip = setting.setting.ip()
-    password = setting.setting.password()
+    ip = setting.setting.setting('nasdb_ip')
+    password = setting.setting.setting('nasdb_password')
 
     form_secondclass = uic.loadUiType("resource/ui/calendar.ui")[0]   # UI 파일 불러와서 변수에 저장
 

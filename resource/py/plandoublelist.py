@@ -20,9 +20,9 @@ try:
 
     form_insertclass = uic.loadUiType("resource/ui/insert.ui")[0]   # UI 파일 불러와서 변수에 저장
 
-    ip = setting.setting.ip()
-    password = setting.setting.password()
-    cutcorrection = setting.setting.cutcorrection()
+    ip = setting.setting.setting('nasdb_ip')
+    password = setting.setting.setting('nasdb_password')
+    cutcorrection = setting.setting.setting('planlist_cutcorrection')
 
     class MyWindow(QMainWindow):   # 메인윈도우 클래스 시작
 

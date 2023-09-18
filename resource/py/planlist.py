@@ -21,10 +21,11 @@ try:
     import plandoublelist,add,setting
     from jamo import h2j,j2hcj
 
-    ip = setting.setting.ip()
-    password = setting.setting.password()
-    premonth = setting.setting.premonth()
-    tomonth = setting.setting.tomonth()
+    
+    ip = setting.setting.setting('nasdb_ip')
+    password = setting.setting.setting('nasdb_password')
+    premonth = setting.setting.setting('planlist_premonth')
+    tomonth = setting.setting.setting('planlist_tomonth')
 
     class MyWindow(QMainWindow):   # 메인윈도우 클래스 시작
 

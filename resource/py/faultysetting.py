@@ -17,8 +17,8 @@ try:
 
     import setting
     
-    ip = setting.setting.ip()
-    password = setting.setting.password()
+    ip = setting.setting.setting('nasdb_ip')
+    password = setting.setting.setting('nasdb_password')
 
     class faultyinsert1(object):
 
