@@ -3,6 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5 import uic
 from dateutil.relativedelta import relativedelta
+from datetime import datetime
 import pymysql,datetime,sys
 
 sys.path.append('resource\\py\\')
@@ -325,14 +326,18 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
         quantity = table1.item(row, 8).text()
         now = datetime.datetime.now()
         nowstr = now.strftime('%Y-%m-%d %H:%M:%S')
-
+        division = table1.item(row, 17).text()
+        partner_company = table1.item(row, 18).text()
+        take_out_time = None
+        
         if '검사완료' in state:
             
             dataed = '검사완료 (' + str(complete) + ' / ' + quantity + ')'
             data = QTableWidgetItem(dataed)
             table1.setItem(row, 15, data)
+            table1.setItem(row, 16, QTableWidgetItem(nowstr))
             
-            for j in range(16):
+            for j in range(20):
                 
                 table1.item(row, j).setBackground(QColor('#FFCC99'))
                 table1.item(row, j).setForeground(QColor('#808080'))
@@ -344,16 +349,16 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
             
             if state_comparison == None:
             
-                sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s)"   # 데이터베이스 명령어를 spl 변수에 저장
+                sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"   # 데이터베이스 명령어를 spl 변수에 저장
                 with conn2.cursor() as cur:
-                    cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr))
+                    cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time))
                     conn2.commit()
                 
             elif state_comparison != None:
                 
-                sql = "UPDATE qclist SET state = %s WHERE bom_id = %s AND order_no = %s AND part_no = %s"   # 데이터베이스 명령어를 spl 변수에 저장
+                sql = "UPDATE qclist SET state = %s and qc_time = %s and division = %s, and partner_company = %s and take_out_time = %s WHERE bom_id = %s AND order_no = %s AND part_no = %s"   # 데이터베이스 명령어를 spl 변수에 저장
                 with conn2.cursor() as cur:
-                    cur.execute(sql,(dataed,bom_id,order_no,part_no))
+                    cur.execute(sql,(dataed,nowstr,division,partner_company,take_out_time,bom_id,order_no,part_no))
                     conn2.commit()
         
         elif "수량부족" in state:
@@ -361,6 +366,7 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
             dataed = '수량부족 (' + str(complete) + ' / ' + quantity + ')'
             data = QTableWidgetItem(dataed)
             table1.setItem(row, 15, data)
+            table1.setItem(row, 16, QTableWidgetItem(nowstr))
             
             sql = "SELECT state FROM qclist WHERE bom_id = %s AND order_no = %s AND part_no = %s"   # 데이터베이스 명령어를 spl 변수에 저장
             with conn2.cursor() as cur:
@@ -369,25 +375,26 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
             
             if state_comparison == None:
             
-                sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s)"   # 데이터베이스 명령어를 spl 변수에 저장
+                sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"   # 데이터베이스 명령어를 spl 변수에 저장
                 with conn2.cursor() as cur:
-                    cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr))
+                    cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time))
                     conn2.commit()
                 
             elif state_comparison != None:
                 
-                sql = "UPDATE qclist SET state = %s WHERE bom_id = %s AND order_no = %s AND part_no = %s"   # 데이터베이스 명령어를 spl 변수에 저장
+                sql = "UPDATE qclist SET state = %s and qc_time = %s and division = %s, and partner_company = %s and take_out_time = %s WHERE bom_id = %s AND order_no = %s AND part_no = %s"   # 데이터베이스 명령어를 spl 변수에 저장
                 with conn2.cursor() as cur:
-                    cur.execute(sql,(dataed,bom_id,order_no,part_no))
+                    cur.execute(sql,(dataed,nowstr,division,partner_company,take_out_time,bom_id,order_no,part_no))
                     conn2.commit()
-            
-            for j in range(16):     
+                    
+            for j in range(20):     
                 
                 table1.item(row, j).setBackground(QColor('#FFFF99'))
                     
         elif state == "취소":
 
             table1.setItem(row, 15, QTableWidgetItem(''))
+            table1.setItem(row, 16, QTableWidgetItem(''))
             
             sql = "DELETE FROM qclist WHERE bom_id = %s AND order_no = %s AND part_no = %s"  # 행삭제 # 데이터베이스 명령어를 spl 변수에 저장
             with conn2.cursor() as cur:
@@ -396,39 +403,51 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
             
             if row % 2 == 1:
                 
-                for j in range(16):
+                for j in range(20):
                     
                     table1.item(row, j).setForeground(QColor('#000000'))
                     table1.item(row, j).setBackground(QColor('#ebf3ff'))
                     
             elif row % 2 == 0:
                 
-                for j in range(16):
+                for j in range(20):
                     
                     table1.item(row, j).setForeground(QColor('#000000'))
                     table1.item(row, j).setBackground(QColor('#ffffff'))
                 
         elif state == '':
 
-            sql = "SELECT state FROM qclist WHERE bom_id = %s AND order_no = %s AND part_no = %s"  # 데이터베이스 명령어를 spl 변수에 저장
+            sql = "SELECT state,qc_time,division,partner_company,take_out_date FROM qclist WHERE bom_id = %s AND order_no = %s AND part_no = %s"  # 데이터베이스 명령어를 spl 변수에 저장
             with conn2.cursor() as cur:
                 cur.execute(sql,(bom_id,order_no,part_no))
                 state = cur.fetchone()
 
-            data = QTableWidgetItem(state[0])
+            for i in range(15,20):
                 
-            table1.setItem(0, 15, data)
+                if state[i-15] == None:
+                    
+                    data = QTableWidgetItem('')
+                    
+                elif state[i-15] != None and type(state[i-15]) == str:
+                    
+                    data = QTableWidgetItem(state[i-15])
+
+                elif state[i-15] != None and type(state[i-15]) == datetime.datetime:
+                    
+                    data = QTableWidgetItem(state[i-15].strftime('%Y/%m/%d'))
+
+                table1.setItem(0, i, data)
             
             if "검사완료" in state[0]:
                 
-                for j in range(16):
+                for j in range(20):
                     
                     table1.item(0, j).setBackground(QColor('#FFCC99'))
                     table1.item(0, j).setForeground(QColor('#808080'))
 
             elif "검사완료" not in state[0] and state[0] != "":
                 
-                for j in range(16):     
+                for j in range(20):     
                 
                     table1.item(row, j).setBackground(QColor('#FFFF99'))
     
