@@ -1,30 +1,15 @@
-from PyQt5 import QtCore, QtWidgets
-import sys
+from PyQt5 import QtCore, QtWidgets,QtGui
 
 # subclass
 class CheckableComboBox(QtWidgets.QComboBox):
-    # once there is a checkState set, it is rendered
-    # here we assume default Unchecked
-    def addItem(self, item):
-        super(CheckableComboBox, self).addItem(item)
-        item = self.model().item(self.count()-1,0)
-        item.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
-        item.setCheckState(QtCore.Qt.Unchecked)
+    def __init__(self):
+        super(CheckableComboBox, self).__init__()
+        self.view().pressed.connect(self.handleItemPressed)
+        self.setModel(QtGui.QStandardItemModel(self))
 
-    def itemChecked(self, index):
-        item = self.model().item(i,0)
-        return item.checkState() == QtCore.Qt.Checked
-
-#the basic main()
-# app = QtWidgets.QApplication(sys.argv)
-# dialog = QtWidgets.QMainWindow()
-# mainWidget = QtWidgets.QWidget()
-# dialog.setCentralWidget(mainWidget)
-# ComboBox = CheckableComboBox(mainWidget)
-# for i in range(6):
-#     ComboBox.addItem("Combobox Item " + str(i))
-
-# ComboBox.currentTextChanged.connect(lambda : print(ComboBox.currentIndex()))
-
-# dialog.show()
-# sys.exit(app.exec_())
+    def handleItemPressed(self, index):
+        item = self.model().itemFromIndex(index)
+        if item.checkState() == QtCore.Qt.Checked:
+            item.setCheckState(QtCore.Qt.Unchecked)
+        else:
+            item.setCheckState(QtCore.Qt.Checked)
