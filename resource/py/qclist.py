@@ -7,6 +7,7 @@ import pymysql,datetime,sys
 
 sys.path.append('resource\\py\\')
 
+from combo_in_check import CheckableComboBox
 import setting
  
 form_insertclass = uic.loadUiType("resource/ui/insert.ui")[0]   # UI 파일 불러와서 변수에 저장
@@ -15,7 +16,7 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
 
     def qclisttable(widget,tab):   # plantabwidget 함수 시작
         
-        global table1,glotab,gridLayout,lineEdit_4,line2,line3
+        global table1,glotab,gridLayout,lineEdit_4,line2,line3,comboBox
         
         glotab = tab
         
@@ -54,9 +55,10 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
         labels3_2 = QLabel()
         labels3_2.setObjectName("labels3_2")
         hbox2.addWidget(labels3_2)
-        comboBox = QComboBox()
-        comboBox.setObjectName("comboBox")
+
+        comboBox = CheckableComboBox(widget)
         hbox2.addWidget(comboBox)
+
         spacerItem1 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
         hbox2.addItem(spacerItem1)
         label_5 = QLabel()
@@ -106,7 +108,7 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
         qclist.plantable()
         
         refreshbtn.clicked.connect(qclist.plantable)
-        pushButton_7.clicked.connect(lambda: qclist.search(lineEdit_4))
+        pushButton_7.clicked.connect(qclist.search)
     
     def enter():
         
@@ -156,7 +158,7 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                         '   고객납기   ',
                         '              공정              ',
                         '       후처리       ',
-                        ' 검사여부 '
+                        '      검사여부      '
                     ]                     # 테이블 위젯 헤더에 사용할 리스트 정리 끝
 
         table1.setColumnCount(len(headerlist))   # table1 테이블 위젯 열 갯수를 headerlist 리스트 갯수만큼 설정
@@ -176,8 +178,8 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
         
         conn1 = pymysql.connect(host='152.70.252.118', user='vps_order', password='6006deok!', db='vps_order', charset='utf8', port=3306)   # 데이터 베이스 접속 내용을 conn 변수에 저장
         conn2 = pymysql.connect(host='192.168.120.85', user='user', password='VPsystem1234!!', db='vps_planner', charset='utf8', port=1980)   # 데이터 베이스 접속 내용을 conn 변수에 저장
-        start_date = line2.text().replace(' ','')
-        end_date = line3.text().replace(' ','')
+        start_date = line2.text().replace(' ','') + ' 00:00:01'
+        end_date = line3.text().replace(' ','') + ' 23:59:59'
         
         sql = "SELECT order_date, order_no, customer_name, build_date, retouch_date, delivery_date FROM order_master WHERE create_date BETWEEN %s AND %s"   # 데이터베이스 명령어를 spl 변수에 저장
         with conn1.cursor() as cur:
@@ -283,25 +285,25 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
             QMessageBox.information(glotab,'수량 입력!','값을 입력해주세요.')
             insertwindow()
 
-        elif int(complete) > int(table1.item(row,8).text()):
+        # elif int(complete) > int(table1.item(row,8).text()):
             
-            QMessageBox.information(glotab,'수량 확인','제작수량보다 많은 수량이 입력되었습니다.\n다시 확인해주세요.')
-            insertwindow()
+        #     QMessageBox.information(glotab,'수량 확인','제작수량보다 많은 수량이 입력되었습니다.\n다시 확인해주세요.')
+        #     insertwindow()
             
         elif int(complete) < int(table1.item(row,8).text()):
             
-            qclist.qcmenu("검사중",row,complete)
+            qclist.qcmenu("수량부족",row,complete)
         
-        elif int(complete) == int(table1.item(row,8).text()):
+        elif int(complete) >= int(table1.item(row,8).text()):
             
-            qclist.qcmenu("검사완료",row,0)
+            qclist.qcmenu("검사완료",row,complete)
         
         elif int(complete) == 0:
             
             pass
 
     def qcmenu(state,row,complete):
-        
+
         conn2 = pymysql.connect(host='192.168.120.85', user='user', password='VPsystem1234!!', db='vps_planner', charset='utf8', port=1980)   # 데이터 베이스 접속 내용을 conn 변수에 저장
         data = QTableWidgetItem(state)
         
@@ -315,8 +317,10 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
         now = datetime.datetime.now()
         nowstr = now.strftime('%Y-%m-%d %H:%M:%S')
 
-        if state == '검사완료':
+        if '검사완료' in state:
             
+            dataed = '검사완료 (' + str(complete) + ' / ' + quantity + ')'
+            data = QTableWidgetItem(dataed)
             table1.setItem(row, 15, data)
             
             for j in range(16):
@@ -333,19 +337,19 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
             
                 sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s)"   # 데이터베이스 명령어를 spl 변수에 저장
                 with conn2.cursor() as cur:
-                    cur.execute(sql,(bom_id,order_no,part_no,state,nowstr))
+                    cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr))
                     conn2.commit()
                 
             elif state_comparison != None:
                 
                 sql = "UPDATE qclist SET state = %s WHERE bom_id = %s AND order_no = %s AND part_no = %s"   # 데이터베이스 명령어를 spl 변수에 저장
                 with conn2.cursor() as cur:
-                    cur.execute(sql,(state,bom_id,order_no,part_no))
+                    cur.execute(sql,(dataed,bom_id,order_no,part_no))
                     conn2.commit()
         
-        elif state == "검사중":
+        elif "수량부족" in state:
             
-            dataed = str(complete) + ' / ' + quantity
+            dataed = '수량부족 (' + str(complete) + ' / ' + quantity + ')'
             data = QTableWidgetItem(dataed)
             table1.setItem(row, 15, data)
             
@@ -406,14 +410,14 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                 
             table1.setItem(0, 15, data)
             
-            if state[0] == "검사완료":
+            if "검사완료" in state[0]:
                 
                 for j in range(16):
                     
                     table1.item(0, j).setBackground(QColor('#FFCC99'))
                     table1.item(0, j).setForeground(QColor('#808080'))
 
-            elif state[0] != "검사완료" and state[0] != "":
+            elif "검사완료" not in state[0] and state[0] != "":
                 
                 for j in range(16):     
                 
@@ -429,7 +433,6 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
         # 아이템에서
         else:
             
-            print(1)
             menu = QMenu()
             row = table1.currentRow()
             menu.addAction("검사완료", lambda: insertwindow())
@@ -460,7 +463,7 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                         '   고객납기   ',
                         '              공정              ',
                         '       후처리       ',
-                        ' 검사여부 '
+                        ' 검사여부 (완료 / 발주) '
                     ]                     # 테이블 위젯 헤더에 사용할 리스트 정리 끝
 
         table1.setColumnCount(len(headerlist))   # table1 테이블 위젯 열 갯수를 headerlist 리스트 갯수만큼 설정
@@ -480,8 +483,9 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
         
         conn1 = pymysql.connect(host='152.70.252.118', user='vps_order', password='6006deok!', db='vps_order', charset='utf8', port=3306)   # 데이터 베이스 접속 내용을 conn 변수에 저장
         conn2 = pymysql.connect(host='192.168.120.85', user='user', password='VPsystem1234!!', db='vps_planner', charset='utf8', port=1980)   # 데이터 베이스 접속 내용을 conn 변수에 저장
-        start_date = line2.text().replace(' ','')
-        end_date = line3.text().replace(' ','')
+        start_date = line2.text().replace(' ','') + ' 00:00:01'
+        end_date = line3.text().replace(' ','') + ' 23:59:59'
+        company_list = []
         
         sql = "SELECT order_date, order_no, customer_name, build_date, retouch_date, delivery_date FROM order_master WHERE create_date BETWEEN %s AND %s"   # 데이터베이스 명령어를 spl 변수에 저장
         with conn1.cursor() as cur:
@@ -510,10 +514,15 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                     if type(x[i-1]) is datetime.date:
                         
                         data = QTableWidgetItem(x[i-1].strftime('%Y-%m-%d'))
-                        
-                    elif type(x[i-1]) is str:
+                    
+                    elif type(x[i-1]) is str and i != 3:
 
                         data = QTableWidgetItem(x[i-1])
+                    
+                    elif i == 3:
+                        
+                        data = QTableWidgetItem(x[i-1])
+                        company_list.append(x[i-1])
 
                     table1.setItem(rowindex, i, data)
 
@@ -571,7 +580,14 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                     row = table1.currentRow()
                     
                     qclist.qcmenu('',row,0)
-                    
+        
+        company_list = list(set(company_list))
+        company_list.sort()
+        
+        for x in company_list:
+            
+            comboBox.addItem(x)
+
 class insertwindow(QMainWindow,form_insertclass):
 
     def __init__(self):
