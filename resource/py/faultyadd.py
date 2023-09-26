@@ -1137,7 +1137,7 @@ try:
 
                 fullname_file = os.path.join(dir, file)
 
-                if '.xlsx' in file:
+                if '.xlsx' in file and '~$' not in file:
 
                     filelist.append(fullname_file)
 
@@ -1145,35 +1145,41 @@ try:
                 
                 loadwb = load_workbook(fullname_file)
                 loadws = loadwb['Sheet1']
-                self.tableWidget.setColumnCount(3)
                 header = ['부서','파트','성명']
+                j = 0
+                
+                self.tableWidget.setColumnCount(3)
                 self.tableWidget.setHorizontalHeaderLabels(header)
 
-                for x in range(1,loadws.max_row):
+                for x in range(3,loadws.max_row):
 
-                    if loadws.cell(x,3).value == None:
+                    if loadws.cell(x,2).value != None:
 
-                        if str(loadws.cell(x,2).value) == '품질출하팀' or str(loadws.cell(x,2).value) == '제조팀':
+                        j = 0
+                        department = str(loadws.cell(x,2).value)
 
-                            i = self.tableWidget.rowCount()
-                            self.tableWidget.insertRow(i)
-                            department = str(loadws.cell(x,2).value)
-                            part = '팀장'
-                            name = str(loadws.cell(x,4).value)
-                            self.tableWidget.setItem(i, 0, QTableWidgetItem(department.center(len(department)+2," ")))
-                            self.tableWidget.setItem(i, 1, QTableWidgetItem(part.center(len(part)+2," ")))
-                            self.tableWidget.setItem(i, 2, QTableWidgetItem(name.center(len(name)+2," ")))
+                    elif loadws.cell(x,2).value == None:
 
-                    elif str(loadws.cell(x,3).value) == '파트':
-
-                        pass
-
-                    elif loadws.cell(x,3).value != None:
-
+                        j += 1
+                        department = str(loadws.cell(x-j,2).value)
+                        
+                    if department == '품질출하팀' or department == '제조팀':
+                        
+                        print(j)
+                        print(department)
                         i = self.tableWidget.rowCount()
-                        self.tableWidget.insertRow(i)
-                        part = str(loadws.cell(x,3).value)
+                        
+                        if loadws.cell(x,3).value != None:
+                            
+                            part = str(loadws.cell(x,3).value)
+                            
+                        elif loadws.cell(x,3).value == None:
+                            
+                            part = str(loadws.cell(x,7).value)
+                            
                         name = str(loadws.cell(x,4).value)
+                        
+                        self.tableWidget.insertRow(i)
                         self.tableWidget.setItem(i, 0, QTableWidgetItem(department.center(len(department)+2," ")))
                         self.tableWidget.setItem(i, 1, QTableWidgetItem(part.center(len(part)+2," ")))
                         self.tableWidget.setItem(i, 2, QTableWidgetItem(name.center(len(name)+2," ")))
