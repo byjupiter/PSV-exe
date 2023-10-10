@@ -178,25 +178,34 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
             dataed = table1.item(row, 15).text()
             partner_company = table1.item(row,18).text()
             division = table1.item(row, 17).text()
-            
-            if table1.item(row, 16) == None or table1.item(row, 16).text() == '':
-                
-                nowstr = 'NULL'
-                
-            elif table1.item(row, 16) != None:
-                
-                nowstr = table1.item(row, 16).text()
-            
             now = datetime.datetime.now()
             take_out_time = now.strftime('%Y-%m-%d %H:%M:%S')
             data = take_out_time.split(' ')[0]
             
             table1.item(row, 19).setText(data)
-            
-            sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE partner_company = %s, take_out_date = %s"   # 데이터베이스 명령어를 spl 변수에 저장
+
+            sql = "SELECT qc_time FROM qclist WHERE bom_id = %s AND order_no = %s AND part_no = %s"  # 데이터베이스 명령어를 spl 변수에 저장
             with conn2.cursor() as cur:
-                cur.execute(sql,(bom_id,order_no,part_no,dataed,'NULL',division,partner_company,take_out_time,partner_company,take_out_time))
-                conn2.commit()
+                cur.execute(sql,(bom_id,order_no,part_no))
+                sqlnowstr = cur.fetchone()
+                    
+            if sqlnowstr != None:
+
+                sql = "UPDATE qclist SET partner_company = %s,take_out_date = %s WHERE bom_id = %s AND order_no = %s AND part_no = %s"   # 데이터베이스 명령어를 spl 변수에 저장
+                with conn2.cursor() as cur:
+                    cur.execute(sql,(partner_company,take_out_time,bom_id,order_no,part_no))
+                    conn2.commit()
+
+            elif sqlnowstr == None:
+
+                dataed = None
+                nowstr = None
+                division = None
+
+                sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"   # 데이터베이스 명령어를 spl 변수에 저장
+                with conn2.cursor() as cur:
+                    cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time))
+                    conn2.commit()
 
         if item.column() == 17:
 
@@ -207,15 +216,36 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
             dataed = table1.item(row, 15).text()
             partner_company = table1.item(row,18).text()
             division = table1.item(row, 17).text()
-            nowstr = table1.item(row, 16).text()
             now = datetime.datetime.now()
             take_out_time = now.strftime('%Y-%m-%d %H:%M:%S')
             data = take_out_time.split(' ')[0]
             
-            sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE state = %s, qc_time = %s, division = %s"   # 데이터베이스 명령어를 spl 변수에 저장
+            sql = "SELECT qc_time FROM qclist WHERE bom_id = %s AND order_no = %s AND part_no = %s"  # 데이터베이스 명령어를 spl 변수에 저장
             with conn2.cursor() as cur:
-                cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time,dataed,nowstr,division))
-                conn2.commit()
+                cur.execute(sql,(bom_id,order_no,part_no))
+                sqlnowstr = cur.fetchone()
+
+            if sqlnowstr != None:
+
+                sql = "UPDATE qclist SET division = %s, partner_company = %s,take_out_date = %s WHERE bom_id = %s AND order_no = %s AND part_no = %s"   # 데이터베이스 명령어를 spl 변수에 저장
+                with conn2.cursor() as cur:
+                    cur.execute(sql,(division,partner_company,take_out_time,bom_id,order_no,part_no))
+                    conn2.commit()
+
+            elif sqlnowstr == None:
+                
+                dataed = None
+                nowstr = None
+                
+                sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"   # 데이터베이스 명령어를 spl 변수에 저장
+                with conn2.cursor() as cur:
+                    cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time))
+                    conn2.commit()
+            
+            # sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE state = %s, qc_time = %s, division = %s"   # 데이터베이스 명령어를 spl 변수에 저장
+            # with conn2.cursor() as cur:
+            #     cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time,dataed,nowstr,division))
+            #     conn2.commit()
                 
         else:
             
@@ -393,19 +423,25 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                 elif state[i-15] != None and type(state[i-15]) == datetime.datetime:
 
                     table1.item(0, i).setText(state[i-15].strftime('%Y/%m/%d'))
+                    
+            if state[0] == None:
+                
+                pass
+            
+            elif state[0] != None:
 
-            if "검사완료" in state[0]:
+                if "검사완료" in state[0]:
 
-                for j in range(20):
+                    for j in range(20):
 
-                    table1.item(0, j).setBackground(QColor('#FFCC99'))
-                    table1.item(0, j).setForeground(QColor('#808080'))
+                        table1.item(0, j).setBackground(QColor('#FFCC99'))
+                        table1.item(0, j).setForeground(QColor('#808080'))
 
-            elif "검사완료" not in state[0] and state[0] != "":
+                elif "검사완료" not in state[0] and state[0] != "":
 
-                for j in range(20):
+                    for j in range(20):
 
-                    table1.item(row, j).setBackground(QColor('#FFFF99'))
+                        table1.item(row, j).setBackground(QColor('#FFFF99'))
     
     def generateMenu(pos):
         
@@ -593,7 +629,16 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                     if state != None:
 
                         row = table1.currentRow()
-                        data = QTableWidgetItem(state[1].strftime('%Y/%M/%D'))
+
+                        if state[1] != None:
+                            
+                            
+                            
+                            data = QTableWidgetItem(state[1].strftime('%Y/%M/%D'))
+                            
+                        elif state[1] == None:
+
+                            data = QTableWidgetItem('')
                         
                         table1.setItem(rowindex, i, data)
                         qclist.qcmenu('',row,0)
