@@ -4,6 +4,8 @@ from PyQt5.QtGui import *
 from PyQt5 import uic
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
+from openpyxl import load_workbook, Workbook
+from openpyxl.styles import Alignment
 import pymysql,datetime,sys
 
 sys.path.append('resource\\py\\')
@@ -66,6 +68,9 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
         refreshbtn = QPushButton()
         refreshbtn.setObjectName("refreshbtn")
         hbox2.addWidget(refreshbtn)
+        pushButton = QPushButton()
+        pushButton.setObjectName("pushButton")
+        hbox2.addWidget(pushButton)
         gridLayout.addLayout(hbox2, 0, 0, 1, 1)
         table1 = QTableWidget()
         table1.setObjectName("table1")
@@ -86,9 +91,9 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
         pushButton_2.setObjectName("pushButton_2")
         hbox2_2.addWidget(pushButton_2)
         gridLayout.addLayout(hbox2_2, 1, 0, 1, 1)
-        
-        widget.setLayout(gridLayout)
 
+        widget.setLayout(gridLayout)
+        
         _translate = QCoreApplication.translate
         labels3.setText(_translate("grid", "수주일자 : "))
         line2.setInputMask(_translate("grid", "0000 - 00 - 00"))
@@ -99,8 +104,9 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
         label_5.setText(_translate("grid", "도면번호 검색 : "))
         pushButton_7.setText(_translate("grid", "검색"))
         refreshbtn.setText(_translate("grid", "새로고침"))
+        pushButton.setText(_translate("grid", "엑셀저장"))
         table1.setSortingEnabled(True)
-        label.setText(_translate("grid", "필터현황 : "))
+        label.setText(_translate("grid", "필터 현황 : "))
         pushButton_3.setText(_translate("grid", "필터설정"))
         pushButton_2.setText(_translate("grid", "필터초기화"))
         
@@ -119,41 +125,96 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
         
         refreshbtn.clicked.connect(lambda: qclist.plantable(''))
         pushButton_7.clicked.connect(qclist.search)
+        pushButton.clicked.connect(qclist.excel)
         
+    def excel():
+        
+        wb = Workbook()
+        ws = wb.active  
+
+        for i in range(table1.rowCount()):
+            
+            ii = i + 2
+            pasj = 0
+            
+            for j in range(table1.columnCount()):
+                
+                if j == 0 or j == 2 or j == 9:
+                    
+                    pasj += 1
+                    pass
+                
+                else:
+                    
+                    jj = j + 2 - pasj
+                    
+                    if table1.item(i,j) == None:
+
+                        ws.cell(ii,jj,'').alignment = Alignment(horizontal='center', vertical='center')
+                    
+                    else:
+                    
+                        ws.cell(ii,jj,str(table1.item(i,j).text()).strip().replace("   "," ").replace("  "," ")).alignment = Alignment(horizontal='center', vertical='center')
+
+        path = QFileDialog.getSaveFileName(glowidget,'Save File','','Exel(*.xlsx)')
+
+        try:
+            wb.save(path[0])
+            QMessageBox.information(glowidget,'저장 완료','저장이 완료되었습니다.')
+        except:
+            QMessageBox.warning(glowidget,'경로 선택','경로 및 파일이름을 설정해주세요.')
+            pass
+    
     def changeitem(item):
         
         row = table1.currentRow()
-        print(item.column())
-        if item.column() == 18:
+
+        if item.column() == 18 and item.text() != '':
             
             conn2 = pymysql.connect(host='192.168.120.85', user='user', password='VPsystem1234!!', db='vps_planner', charset='utf8', port=1980)   # 데이터 베이스 접속 내용을 conn 변수에 저장
             bom_id = table1.item(row, 0).text()
             order_no = table1.item(row, 2).text()
             part_no = table1.item(row, 5).text()
+            dataed = table1.item(row, 15).text()
             partner_company = table1.item(row,18).text()
             division = table1.item(row, 17).text()
+            
+            if table1.item(row, 16) == None or table1.item(row, 16).text() == '':
+                
+                nowstr = 'NULL'
+                
+            elif table1.item(row, 16) != None:
+                
+                nowstr = table1.item(row, 16).text()
+            
             now = datetime.datetime.now()
-            take_out_date = now.strftime('%Y-%m-%d %H:%M:%S')
-            data = take_out_date.split(' ')[0]
+            take_out_time = now.strftime('%Y-%m-%d %H:%M:%S')
+            data = take_out_time.split(' ')[0]
             
             table1.item(row, 19).setText(data)
             
-            sql = "UPDATE qclist SET division = %s, partner_company = %s, take_out_date = %s WHERE bom_id = %s AND order_no = %s AND part_no = %s"   # 데이터베이스 명령어를 spl 변수에 저장
+            sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE partner_company = %s, take_out_date = %s"   # 데이터베이스 명령어를 spl 변수에 저장
             with conn2.cursor() as cur:
-                cur.execute(sql,(division,partner_company,take_out_date,bom_id,order_no,part_no))
+                cur.execute(sql,(bom_id,order_no,part_no,dataed,'NULL',division,partner_company,take_out_time,partner_company,take_out_time))
                 conn2.commit()
-                
+
         if item.column() == 17:
-            
+
             conn2 = pymysql.connect(host='192.168.120.85', user='user', password='VPsystem1234!!', db='vps_planner', charset='utf8', port=1980)   # 데이터 베이스 접속 내용을 conn 변수에 저장
             bom_id = table1.item(row, 0).text()
             order_no = table1.item(row, 2).text()
             part_no = table1.item(row, 5).text()
+            dataed = table1.item(row, 15).text()
+            partner_company = table1.item(row,18).text()
             division = table1.item(row, 17).text()
+            nowstr = table1.item(row, 16).text()
+            now = datetime.datetime.now()
+            take_out_time = now.strftime('%Y-%m-%d %H:%M:%S')
+            data = take_out_time.split(' ')[0]
             
-            sql = "UPDATE qclist SET division = %s WHERE bom_id = %s AND order_no = %s AND part_no = %s"   # 데이터베이스 명령어를 spl 변수에 저장
+            sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE state = %s, qc_time = %s, division = %s"   # 데이터베이스 명령어를 spl 변수에 저장
             with conn2.cursor() as cur:
-                cur.execute(sql,(division,bom_id,order_no,part_no))
+                cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time,dataed,nowstr,division))
                 conn2.commit()
                 
         else:
@@ -257,24 +318,10 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                 table1.item(row, j).setBackground(QColor('#FFCC99'))
                 table1.item(row, j).setForeground(QColor('#808080'))
                 
-            sql = "SELECT state FROM qclist WHERE bom_id = %s AND order_no = %s AND part_no = %s"   # 데이터베이스 명령어를 spl 변수에 저장
+            sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE state = %s, qc_time = %s, division = %s"   # 데이터베이스 명령어를 spl 변수에 저장
             with conn2.cursor() as cur:
-                cur.execute(sql,(bom_id,order_no,part_no))
-                state_comparison = cur.fetchone()
-            
-            if state_comparison == None:
-            
-                sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"   # 데이터베이스 명령어를 spl 변수에 저장
-                with conn2.cursor() as cur:
-                    cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time))
-                    conn2.commit()
-                
-            elif state_comparison != None:
-                
-                sql = "UPDATE qclist SET state = %s and qc_time = %s and division = %s, and partner_company = %s and take_out_time = %s WHERE bom_id = %s AND order_no = %s AND part_no = %s"   # 데이터베이스 명령어를 spl 변수에 저장
-                with conn2.cursor() as cur:
-                    cur.execute(sql,(dataed,nowstr,division,partner_company,take_out_time,bom_id,order_no,part_no))
-                    conn2.commit()
+                cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time,dataed,nowstr,division))
+                conn2.commit()
         
         elif "수량부족" in state:
             
@@ -293,31 +340,19 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
             for j in range(20):     
                 
                 table1.item(row, j).setBackground(QColor('#FFFF99'))
-            
-            sql = "SELECT state FROM qclist WHERE bom_id = %s AND order_no = %s AND part_no = %s"   # 데이터베이스 명령어를 spl 변수에 저장
+
+            sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE state = %s, qc_time = %s, division = %s"   # 데이터베이스 명령어를 spl 변수에 저장
             with conn2.cursor() as cur:
-                cur.execute(sql,(bom_id,order_no,part_no))
-                state_comparison = cur.fetchone()
-            
-            if state_comparison == None:
-            
-                sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"   # 데이터베이스 명령어를 spl 변수에 저장
-                with conn2.cursor() as cur:
-                    cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time))
-                    conn2.commit()
-                
-            elif state_comparison != None:
-                
-                sql = "UPDATE qclist SET state = %s and qc_time = %s and division = %s, and partner_company = %s and take_out_time = %s WHERE bom_id = %s AND order_no = %s AND part_no = %s"   # 데이터베이스 명령어를 spl 변수에 저장
-                with conn2.cursor() as cur:
-                    cur.execute(sql,(dataed,nowstr,division,partner_company,take_out_time,bom_id,order_no,part_no))
-                    conn2.commit()
+                cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time,dataed,nowstr,division))
+                conn2.commit()
                     
         elif state == "취소":
 
-            for i in range(15,20):
-
-                table1.item(row, i).setText('')
+            for i in range(15,21):
+                
+                if table1.item(row, i) != None:
+                    
+                    table1.item(row, i).setText('')
             
             if row % 2 == 1:
                 
@@ -348,28 +383,28 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
             for i in range(15,20):
 
                 if state[i-15] == None:
-                    
+
                     table1.item(0, i).setText('')
-                    
+
                 elif state[i-15] != None and type(state[i-15]) == str:
-                    
+
                     table1.item(0, i).setText(state[i-15])
 
                 elif state[i-15] != None and type(state[i-15]) == datetime.datetime:
-                    
+
                     table1.item(0, i).setText(state[i-15].strftime('%Y/%m/%d'))
-            
+
             if "검사완료" in state[0]:
-                
+
                 for j in range(20):
-                    
+
                     table1.item(0, j).setBackground(QColor('#FFCC99'))
                     table1.item(0, j).setForeground(QColor('#808080'))
 
             elif "검사완료" not in state[0] and state[0] != "":
-                
-                for j in range(20):     
-                
+
+                for j in range(20):
+
                     table1.item(row, j).setBackground(QColor('#FFFF99'))
     
     def generateMenu(pos):
@@ -400,9 +435,7 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
         
         qclist.tableclear()
 
-        table1.setSortingEnabled(False)
-        table1.clear()
-        table1.setRowCount(0)
+        table1.setSortingEnabled(True)
         lineEdit_4.clear()
 
         headerlist = [  'Bom',

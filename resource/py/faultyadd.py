@@ -1165,8 +1165,6 @@ try:
                         
                     if department == '품질출하팀' or department == '제조팀':
                         
-                        print(j)
-                        print(department)
                         i = self.tableWidget.rowCount()
                         
                         if loadws.cell(x,3).value != None:
