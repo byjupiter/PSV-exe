@@ -6,7 +6,7 @@ from dateutil.relativedelta import relativedelta
 from datetime import datetime
 from openpyxl import load_workbook, Workbook
 from openpyxl.styles import Alignment
-import pymysql,datetime,sys
+import pymysql,datetime,sys,time
 
 sys.path.append('resource\\py\\')
 
@@ -202,7 +202,7 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                 nowstr = None
                 division = None
 
-                sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"   # 데이터베이스 명령어를 spl 변수에 저장
+                sql = "INSERT INTO qclist (bom_id,order_no,part_no,state,qc_time,division,partner_company,take_out_date) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"   # 데이터베이스 명령어를 spl 변수에 저장
                 with conn2.cursor() as cur:
                     cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time))
                     conn2.commit()
@@ -237,7 +237,7 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                 dataed = None
                 nowstr = None
                 
-                sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"   # 데이터베이스 명령어를 spl 변수에 저장
+                sql = "INSERT INTO qclist (bom_id,order_no,part_no,state,qc_time,division,partner_company,take_out_date) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"   # 데이터베이스 명령어를 spl 변수에 저장
                 with conn2.cursor() as cur:
                     cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time))
                     conn2.commit()
@@ -348,7 +348,7 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                 table1.item(row, j).setBackground(QColor('#FFCC99'))
                 table1.item(row, j).setForeground(QColor('#808080'))
                 
-            sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE state = %s, qc_time = %s, division = %s"   # 데이터베이스 명령어를 spl 변수에 저장
+            sql = "INSERT INTO qclist (bom_id,order_no,part_no,state,qc_time,division,partner_company,take_out_date) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE state = %s, qc_time = %s, division = %s"   # 데이터베이스 명령어를 spl 변수에 저장
             with conn2.cursor() as cur:
                 cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time,dataed,nowstr,division))
                 conn2.commit()
@@ -371,7 +371,7 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                 
                 table1.item(row, j).setBackground(QColor('#FFFF99'))
 
-            sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE state = %s, qc_time = %s, division = %s"   # 데이터베이스 명령어를 spl 변수에 저장
+            sql = "INSERT INTO qclist (bom_id,order_no,part_no,state,qc_time,division,partner_company,take_out_date) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE state = %s, qc_time = %s, division = %s"   # 데이터베이스 명령어를 spl 변수에 저장
             with conn2.cursor() as cur:
                 cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time,dataed,nowstr,division))
                 conn2.commit()
@@ -468,7 +468,7 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                 menu.exec_(table1.mapToGlobal(pos))
         
     def plantable(text):   # plantable 함수 시작
-        
+ 
         qclist.tableclear()
 
         table1.setSortingEnabled(True)
@@ -510,7 +510,7 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
         table1.customContextMenuRequested.connect(qclist.generateMenu)
         table1.resizeColumnsToContents()
         table1.resizeRowsToContents()
-        
+
         conn1 = pymysql.connect(host='152.70.252.118', user='vps_order', password='6006deok!', db='vps_order', charset='utf8', port=3306)   # 데이터 베이스 접속 내용을 conn 변수에 저장
         conn2 = pymysql.connect(host='192.168.120.85', user='user', password='VPsystem1234!!', db='vps_planner', charset='utf8', port=1980)   # 데이터 베이스 접속 내용을 conn 변수에 저장
         start_date = line2.text().replace(' ','') + ' 00:00:01'
@@ -532,6 +532,10 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                 detail = cur.fetchall()
 
             for y in detail:
+                
+                        
+                start = time.time()
+           
                 
                 if text in y[2]:
                 
@@ -645,6 +649,8 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                 else:
                     
                     pass
+                
+                print("time :", time.time() - start)
         
         table1.itemChanged.connect(qclist.changeitem)
 
