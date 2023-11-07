@@ -206,8 +206,9 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                 with conn2.cursor() as cur:
                     cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time))
                     conn2.commit()
+                print(dataed,1)
 
-        if item.column() == 17:
+        if item.column() == 17 and item.text() != '':
 
             conn2 = pymysql.connect(host='192.168.120.85', user='user', password='VPsystem1234!!', db='vps_planner', charset='utf8', port=1980)   # 데이터 베이스 접속 내용을 conn 변수에 저장
             bom_id = table1.item(row, 0).text()
@@ -241,12 +242,7 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                 with conn2.cursor() as cur:
                     cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time))
                     conn2.commit()
-            
-            # sql = "INSERT INTO qclist VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE state = %s, qc_time = %s, division = %s"   # 데이터베이스 명령어를 spl 변수에 저장
-            # with conn2.cursor() as cur:
-            #     cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time,dataed,nowstr,division))
-            #     conn2.commit()
-                
+                print(dataed,2)
         else:
             
             pass
@@ -352,6 +348,7 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
             with conn2.cursor() as cur:
                 cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time,dataed,nowstr,division))
                 conn2.commit()
+            print(dataed,3)
         
         elif "수량부족" in state:
             
@@ -375,6 +372,7 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
             with conn2.cursor() as cur:
                 cur.execute(sql,(bom_id,order_no,part_no,dataed,nowstr,division,partner_company,take_out_time,dataed,nowstr,division))
                 conn2.commit()
+            print(dataed,4)
                     
         elif state == "취소":
 
@@ -405,43 +403,30 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
 
         elif state == '':
 
-            sql = "SELECT state,qc_time,division,partner_company,take_out_date FROM qclist WHERE bom_id = %s AND order_no = %s AND part_no = %s"  # 데이터베이스 명령어를 spl 변수에 저장
-            with conn2.cursor() as cur:
-                cur.execute(sql,(bom_id,order_no,part_no))
-                state = cur.fetchone()
+            # sql = "SELECT state,qc_time,division,partner_company,take_out_date FROM qclist WHERE bom_id = %s AND order_no = %s AND part_no = %s"  # 데이터베이스 명령어를 spl 변수에 저장
+            # with conn2.cursor() as cur:
+            #     cur.execute(sql,(bom_id,order_no,part_no))
+            #     state = cur.fetchone()
+                
+            text = table1.item(0,15).text()
 
-            for i in range(15,20):
-
-                if state[i-15] == None:
-
-                    table1.item(0, i).setText('')
-
-                elif state[i-15] != None and type(state[i-15]) == str:
-
-                    table1.item(0, i).setText(state[i-15])
-
-                elif state[i-15] != None and type(state[i-15]) == datetime.datetime:
-
-                    table1.item(0, i).setText(state[i-15].strftime('%Y/%m/%d'))
-                    
-            if state[0] == None:
+            if text == '':
                 
                 pass
-            
-            elif state[0] != None:
+                
 
-                if "검사완료" in state[0]:
+            elif "검사완료" in text:
 
-                    for j in range(20):
+                for j in range(20):
 
-                        table1.item(0, j).setBackground(QColor('#FFCC99'))
-                        table1.item(0, j).setForeground(QColor('#808080'))
+                    table1.item(0, j).setBackground(QColor('#FFCC99'))
+                    table1.item(0, j).setForeground(QColor('#808080'))
 
-                elif "검사완료" not in state[0] and state[0] != "":
+            elif "검사완료" not in text and text != "":
 
-                    for j in range(20):
+                for j in range(20):
 
-                        table1.item(row, j).setBackground(QColor('#FFFF99'))
+                    table1.item(row, j).setBackground(QColor('#FFFF99'))
     
     def generateMenu(pos):
         
@@ -468,6 +453,8 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                 menu.exec_(table1.mapToGlobal(pos))
         
     def plantable(text):   # plantable 함수 시작
+        
+        start = time.time()
  
         qclist.tableclear()
 
@@ -521,21 +508,24 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
         with conn1.cursor() as cur:
             cur.execute(sql,(start_date,end_date))
             master = cur.fetchall()
+            
+        sql = "SELECT bom_id,order_no,part_no,state, qc_time FROM qclist"   # 데이터베이스 명령어를 spl 변수에 저장
+        with conn2.cursor() as cur:
+            cur.execute(sql)
+            state = cur.fetchall()
+            
+        print(state)
 
         for x in master:
             
             order_no = x[1]
-
+             
             sql = "SELECT bom_id, assy_no, parts_no, revision, item_name, quantity, order_detail_desc, routing, retouching FROM order_detail WHERE order_no = %s"   # 데이터베이스 명령어를 spl 변수에 저장
             with conn1.cursor() as cur:
                 cur.execute(sql,(order_no))
                 detail = cur.fetchall()
-
-            for y in detail:
                 
-                        
-                start = time.time()
-           
+            for y in detail:
                 
                 if text in y[2]:
                 
@@ -544,6 +534,21 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                     table1.insertRow(rowindex)
                     table1.setItem(rowindex, 0, data)
                     table1.item(rowindex,0).setFlags(table1.item(rowindex,0).flags() ^ Qt.ItemFlag.ItemIsEditable)
+                    
+                    # table1.item(rowindex,15).setFlags(table1.item(rowindex,15).flags() ^ Qt.ItemFlag.ItemIsEditable)
+                    
+                    # if state != None:
+
+                    #     if state[1] != None:
+                            
+                    #         data = QTableWidgetItem(state[1].strftime('%Y/%M/%D'))
+                            
+                    #     elif state[1] == None:
+
+                    #         data = QTableWidgetItem('')
+                        
+                    #     table1.setItem(rowindex, 18, data)
+                        # 
                     
                     for i in range(1,4):
 
@@ -596,7 +601,7 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                         
                         elif y[i-7] == None:
                             
-                            data = data = QTableWidgetItem('')
+                            data = QTableWidgetItem('')
                         
                         table1.setItem(rowindex, i, data)
                         table1.item(rowindex,i).setFlags(table1.item(rowindex,i).flags() ^ Qt.ItemFlag.ItemIsEditable)
@@ -619,40 +624,32 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
 
                             table1.item(rowindex,i).setFlags(table1.item(rowindex,i).flags() ^ Qt.ItemFlag.ItemIsEditable)
 
-                    sql = "SELECT state, qc_time FROM qclist WHERE bom_id = %s AND order_no = %s AND part_no = %s"   # 데이터베이스 명령어를 spl 변수에 저장
-                    with conn2.cursor() as cur:
-                        cur.execute(sql,(str(y[0]),x[1],y[2]))
-                        state = cur.fetchone()
+                    for state_list in state:
                         
-                    hidec = [0,4,9]
-                    
-                    for xx in hidec:
-                        
-                        table1.hideColumn(xx)
-                    
-                    if state != None:
+                        if x[1] in state_list and y[0] in state_list and y[2] in state_list and state_list[3] is not None and state_list[4] is not None:
+                            
+                            stateitem = QTableWidgetItem(state_list[3])
+                            statedate = QTableWidgetItem(state_list[4].strftime('%Y-%m-%d'))
+                            table1.setItem(rowindex, 15, stateitem) 
+                            table1.item(rowindex,15).setFlags(table1.item(rowindex,15).flags() ^ Qt.ItemFlag.ItemIsEditable)
+                            table1.setItem(rowindex, 16, statedate) 
+                            table1.item(rowindex,16).setFlags(table1.item(rowindex,16).flags() ^ Qt.ItemFlag.ItemIsEditable)
 
-                        row = table1.currentRow()
-
-                        if state[1] != None:
+                    qclist.qcmenu('',rowindex,0)
                             
-                            
-                            
-                            data = QTableWidgetItem(state[1].strftime('%Y/%M/%D'))
-                            
-                        elif state[1] == None:
-
-                            data = QTableWidgetItem('')
-                        
-                        table1.setItem(rowindex, i, data)
-                        qclist.qcmenu('',row,0)
                 else:
                     
                     pass
-                
-                print("time :", time.time() - start)
+        
+        hidec = [0,4,9]
+            
+        for xx in hidec:
+            
+            table1.hideColumn(xx)
         
         table1.itemChanged.connect(qclist.changeitem)
+        
+        print("time :", time.time() - start)
 
 class insertwindow(QMainWindow,form_insertclass):
 
