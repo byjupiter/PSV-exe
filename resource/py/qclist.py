@@ -339,7 +339,7 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                     
                     table1.item(row, i).setText(nowstr)
 
-            for j in range(20):
+            for j in range(15,17):
                 
                 table1.item(row, j).setBackground(QColor('#FFCC99'))
                 table1.item(row, j).setForeground(QColor('#808080'))
@@ -364,7 +364,7 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                     
                     table1.item(row, i).setText(nowstr)
             
-            for j in range(20):     
+            for j in range(15,17):     
                 
                 table1.item(row, j).setBackground(QColor('#FFFF99'))
 
@@ -417,14 +417,14 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
 
             elif "검사완료" in text:
 
-                for j in range(20):
+                for j in range(15,17):
 
                     table1.item(0, j).setBackground(QColor('#FFCC99'))
                     table1.item(0, j).setForeground(QColor('#808080'))
 
             elif "검사완료" not in text and text != "":
 
-                for j in range(20):
+                for j in range(15,17):
 
                     table1.item(row, j).setBackground(QColor('#FFFF99'))
     
@@ -513,8 +513,6 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
         with conn2.cursor() as cur:
             cur.execute(sql)
             state = cur.fetchall()
-            
-        print(state)
 
         for x in master:
             
@@ -635,7 +633,23 @@ class qclist(QMainWindow):   # 메인윈도우 클래스 시작
                             table1.setItem(rowindex, 16, statedate) 
                             table1.item(rowindex,16).setFlags(table1.item(rowindex,16).flags() ^ Qt.ItemFlag.ItemIsEditable)
 
-                    qclist.qcmenu('',rowindex,0)
+                            if state_list[3] == '':
+                        
+                                pass
+                                
+
+                            elif "검사완료" in state_list[3]:
+
+                                for j in range(20):
+
+                                    table1.item(rowindex, j).setBackground(QColor('#FFCC99'))
+                                    table1.item(rowindex, j).setForeground(QColor('#808080'))
+
+                            elif "검사완료" not in state_list[3] and state_list[3] != "":
+
+                                for j in range(20):
+
+                                    table1.item(rowindex, j).setBackground(QColor('#FFFF99'))
                             
                 else:
                     
